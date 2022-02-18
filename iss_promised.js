@@ -22,14 +22,12 @@ const fetchISSFlyOverTimes = function(body) {
 
 const nextISSTimesForMyLocation = function() {
   return fetchMyIP()
-  .then(fetchCoordsByIP) //Parses body inside function
-  .then(fetchISSFlyOverTimes)
-  .then(body => {
-    const { response } = JSON.parse(body);
-    // console.log(response);
-    return response;
-  
-  });
+    .then(fetchCoordsByIP) //Parses body inside function
+    .then(fetchISSFlyOverTimes)
+    .then(body => {
+      const { response } = JSON.parse(body);
+      return response;
+    });
 };
 
 module.exports = { nextISSTimesForMyLocation };

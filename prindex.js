@@ -1,11 +1,4 @@
-const { fetchISSFlyOverTimes, nextISSTimesForMyLocation } = require("./iss_promised");
-// const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require("./iss_promised");
-
-// fetchMyIP()
-// .then(fetchCoordsByIP) //Parses body inside function
-// .then(fetchISSFlyOverTimes)
-// .then(body => {console.log(JSON.parse(body).response)});
-
+const { nextISSTimesForMyLocation } = require("./iss_promised");
 
 nextISSTimesForMyLocation()
   .then((passTimes) => {
