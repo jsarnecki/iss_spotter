@@ -1,16 +1,6 @@
 const request = require("request");
-const { geoAPI, myIP } = require("./constants");
+const { geoAPI } = require("./constants");
 
-//will contain most of the logic for fetching the data from each API endpoint.
-
-/**
- * Makes a single API request to retrieve the user's IP address.
- * Input:
- *   - A callback (to pass back an error or the IP string)
- * Returns (via Callback):
- *   - An error, if any (nullable)
- *   - The IP address as a string (null if error). Example: "162.245.144.188"
- */
 const fetchMyIP = function(callback) {
   // use request to fetch IP address from JSON API
   request("https://api.ipify.org/?format=json", (error, response, body) => {
@@ -25,7 +15,6 @@ const fetchMyIP = function(callback) {
       callback("No IP here...", null);
       return;
     }
-
     if (response.statusCode !== 200) {
       callback(Error(`Status code: ${response.statusCode} when fetching IP.  Response: ${body}`), null);
       return;
@@ -34,7 +23,6 @@ const fetchMyIP = function(callback) {
     return callback(null, myIP);
   });
 };
-
 
 const fetchCoordByIP = function(IP, callback) {
   request(geoAPI, (error, response, body) => {
@@ -54,4 +42,22 @@ const fetchCoordByIP = function(IP, callback) {
   });
 };
 
-module.exports = { fetchMyIP, fetchCoordByIP };
+const fetchISSFlyOverTimes = function(coords, callback) {
+  request(`https://iss-pass.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`, (error, response, body) => {
+    
+    if (error) {
+      callback(Error("There was an error!"), null);
+      return;
+    }
+    if (response.statusCode !== 200) {
+      callback(Error(`One of your coordinates appears invalid, returned status code: ${response.statusCode}`), null);
+      return;
+    }
+
+    const data = JSON.parse(body);
+    return callback(null, data);
+
+  });
+};
+
+module.exports = { fetchMyIP, fetchCoordByIP, fetchISSFlyOverTimes };
